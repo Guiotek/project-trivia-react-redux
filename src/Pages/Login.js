@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import logo from '../trivia.png';
 
 class Login extends Component {
@@ -52,6 +53,13 @@ class Login extends Component {
             />
           </label>
           <button type="button" disabled={ disabled } data-testid="btn-play">Play</button>
+          <button
+            type="button"
+            data-testid="btn-settings"
+          >
+            <Link to="/settings">Configurações</Link>
+          </button>
+
         </form>
       </div>
     );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import logo from '../trivia.png';
 
 class Login extends Component {
@@ -8,6 +8,7 @@ class Login extends Component {
     user: '',
     email: '',
     disabled: true,
+    redirectPlay: false,
   };
 
   handleChange = ({ target }) => {
@@ -24,8 +25,21 @@ class Login extends Component {
     });
   };
 
+  play = async () => {
+    const url = 'https://opentdb.com/api_token.php?command=request';
+    const json = await fetch(url);
+    const data = await json.json();
+    localStorage.setItem('token', `${data.token}`);
+    this.setState({ redirectPlay: true });
+  };
+
   render() {
-    const { user, email, disabled } = this.state;
+    const { user, email, disabled, redirectPlay } = this.state;
+    if (redirectPlay === true) {
+      return (
+        <Redirect to="/Game" />
+      );
+    }
     return (
       <div>
         <img src={ logo } className="App-logo" alt="logo" />
@@ -52,7 +66,14 @@ class Login extends Component {
               name="email"
             />
           </label>
-          <button type="button" disabled={ disabled } data-testid="btn-play">Play</button>
+          <button
+            type="button"
+            disabled={ disabled }
+            data-testid="btn-play"
+            onClick={ this.play }
+          >
+            Play
+          </button>
           <button
             type="button"
             data-testid="btn-settings"

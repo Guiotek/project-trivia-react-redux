@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import logo from '../trivia.png';
 
@@ -80,11 +81,14 @@ class Login extends Component {
           >
             <Link to="/settings">Configurações</Link>
           </button>
-
         </form>
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape().isRequired,
+};
 
 export default connect(null, null)(Login);

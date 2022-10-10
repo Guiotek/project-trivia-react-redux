@@ -5,7 +5,6 @@ import Settings from './Pages/Settings';
 import Login from './Pages/Login';
 import PlayGame from './Pages/PlayGame';
 
-
 export default function App() {
   return (
     <div className="App">

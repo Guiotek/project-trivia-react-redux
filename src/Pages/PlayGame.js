@@ -12,8 +12,8 @@ class PlayGame extends Component {
   };
 
   async componentDidMount() {
-    const { fetchApiQuestion, fetchApiToken } = this.props;
-    await fetchApiToken();
+    const { fetchApiQuestion } = this.props;
+    // await fetchApiToken();
     await fetchApiQuestion();
     this.fetchApi();
   }
@@ -142,7 +142,7 @@ const mapDispatchToProps = (dispatch) => ({
 PlayGame.propTypes = {
   history: PropTypes.shape().isRequired,
   fetchApiQuestion: PropTypes.shape().isRequired,
-  fetchApiToken: PropTypes.shape().isRequired,
+  // fetchApiToken: PropTypes.shape().isRequired,
   responseCode: PropTypes.number.isRequired,
   isLoading: PropTypes.bool.isRequired,
   questions: PropTypes.shape().isRequired,

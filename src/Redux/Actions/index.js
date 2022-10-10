@@ -28,11 +28,11 @@ export const fetchToken = () => async (dispatch) => {
 };
 
 export const fetchQuestion = () => async (dispatch) => {
-  const checkApi = JSON.parse(localStorage.getItem('token'));
+  const checkApi = localStorage.getItem('token');
   if (checkApi === null) {
     requestInitialState();
   } else {
-    const getQuest = await fetch(`https://opentdb.com/api.php?amount=5&token=${checkApi.token}`);
+    const getQuest = await fetch(`https://opentdb.com/api.php?amount=5&token=${checkApi}`);
     const response = await getQuest.json();
     dispatch(getQuestion(response));
   }

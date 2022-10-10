@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import logo from '../trivia.png';
 
@@ -38,7 +37,7 @@ class Login extends Component {
     const { user, email, disabled, redirectPlay } = this.state;
     if (redirectPlay === true) {
       return (
-        <Redirect to="/Game" />
+        <Redirect to="/playgame" />
       );
     }
     return (
@@ -86,9 +85,5 @@ class Login extends Component {
     );
   }
 }
-
-Login.propTypes = {
-  history: PropTypes.shape().isRequired,
-};
 
 export default connect(null, null)(Login);

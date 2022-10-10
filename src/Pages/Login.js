@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import logo from '../trivia.png';
 
 class Login extends Component {
@@ -21,6 +22,11 @@ class Login extends Component {
         this.setState({ disabled: true });
       }
     });
+  };
+
+  handleClick = () => {
+    const { history } = this.props;
+    history.push('playgame');
   };
 
   render() {
@@ -51,11 +57,22 @@ class Login extends Component {
               name="email"
             />
           </label>
-          <button type="button" disabled={ disabled } data-testid="btn-play">Play</button>
+          <button
+            type="button"
+            disabled={ disabled }
+            data-testid="btn-play"
+            onClick={ this.handleClick }
+          >
+            Play
+          </button>
         </form>
       </div>
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape().isRequired,
+};
 
 export default connect(null, null)(Login);

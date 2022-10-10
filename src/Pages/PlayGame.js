@@ -7,6 +7,8 @@ import { fetchQuestion, fetchToken, requestUpdateState } from '../Redux/Actions'
 class PlayGame extends Component {
   state = {
     indice: 0,
+    allAnswers: [],
+    iAnswers: [],
   };
 
   async componentDidMount() {
@@ -18,7 +20,7 @@ class PlayGame extends Component {
 
   handleClick = () => {
     const { indice } = this.state;
-    this.setState({ indice: indice + 1 });
+    this.setState({ indice: indice + 1 }, () => { this.randomAnswer(); });
   };
 
   fetchApi = () => {
@@ -29,12 +31,41 @@ class PlayGame extends Component {
       history.push('/');
     } else {
       updateState();
+      this.randomAnswer();
     }
   };
 
-  render() {
-    const { isLoading, questions } = this.props;
+  dataTestValue = (answer, index) => {
+    const { questions } = this.props;
     const { indice } = this.state;
+    if (answer !== questions[indice].correct_answer) {
+      return `wrong-answer-${index}`;
+    } return 'correct-answer';
+  };
+
+  randomAnswer = () => {
+    const { questions } = this.props;
+    const { indice } = this.state;
+    const maxQuestions = 3;
+    const correctAnswer = questions[indice].correct_answer;
+    let iAnswers = [];
+    const allAnswers = [correctAnswer, ...questions[indice].incorrect_answers];
+    if (questions[indice].type === 'boolean') {
+      iAnswers = [0, 1];
+    } else {
+      iAnswers = [0, 1, 2, maxQuestions];
+    }
+    for (let i = iAnswers.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [iAnswers[i], iAnswers[j]] = [iAnswers[j], iAnswers[i]];
+    }
+    this.setState({ allAnswers, iAnswers });
+  };
+
+  render() {
+    const aux = 3;
+    const { isLoading, questions } = this.props;
+    const { indice, iAnswers, allAnswers } = this.state;
     return (
       <div>
         <h1>Jogar</h1>
@@ -43,63 +74,49 @@ class PlayGame extends Component {
             <div>
               <h3 data-testid="question-category">{ questions[indice].category }</h3>
               <p data-testid="question-text">{ questions[indice].question }</p>
-              <section data-testid="answer-options">
-                { questions[indice].type === 'boolean'
-                  ? (
-                    <div>
-                      <div>
-                        <button
-                          data-testid="correct-answer"
-                          type="button"
-                        >
-                          {questions[indice].correct_answer}
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          data-testid={ `wrong-answer-${0}` }
-                          type="button"
-                        >
-                          {questions[indice].incorrect_answers[0]}
-                        </button>
-                      </div>
-                    </div>)
-                  : (
-                    <div>
-                      <div>
-                        <button
-                          data-testid="correct-answer"
-                          type="button"
-                        >
-                          {questions[indice].correct_answer}
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          data-testid={ `wrong-answer-${0}` }
-                          type="button"
-                        >
-                          {questions[indice].incorrect_answers[0]}
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          data-testid={ `wrong-answer-${1}` }
-                          type="button"
-                        >
-                          {questions[indice].incorrect_answers[1]}
-                        </button>
-                      </div>
-                      <div>
-                        <button
-                          data-testid={ `wrong-answer-${2}` }
-                          type="button"
-                        >
-                          {questions[indice].incorrect_answers[2]}
-                        </button>
-                      </div>
-                    </div>)}
-              </section>
+              { questions[indice].type === 'boolean'
+                ? (
+                  <section data-testid="answer-options">
+                    <button
+                      data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
+                      type="button"
+                    >
+                      {allAnswers[iAnswers[0]]}
+                    </button>
+                    <button
+                      data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
+                      type="button"
+                    >
+                      {allAnswers[iAnswers[1]]}
+                    </button>
+                  </section>)
+                : (
+                  <section data-testid="answer-options">
+                    <button
+                      data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
+                      type="button"
+                    >
+                      {allAnswers[iAnswers[0]]}
+                    </button>
+                    <button
+                      data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
+                      type="button"
+                    >
+                      {allAnswers[iAnswers[1]]}
+                    </button>
+                    <button
+                      data-testid={ this.dataTestValue(allAnswers[iAnswers[2]], 2) }
+                      type="button"
+                    >
+                      {allAnswers[iAnswers[2]]}
+                    </button>
+                    <button
+                      data-testid={ this.dataTestValue(allAnswers[iAnswers[3]], aux) }
+                      type="button"
+                    >
+                      {allAnswers[iAnswers[3]]}
+                    </button>
+                  </section>)}
               <button type="button" onClick={ this.handleClick }>PROXIMA</button>
             </div>
           )}

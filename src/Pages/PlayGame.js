@@ -10,6 +10,7 @@ class PlayGame extends Component {
     indice: 0,
     allAnswers: [],
     iAnswers: [],
+    click: false,
     showNextButton: false,
   };
 
@@ -22,7 +23,7 @@ class PlayGame extends Component {
 
   handleClick = () => {
     const { indice } = this.state;
-    this.setState({ indice: indice + 1 }, () => { this.randomAnswer(); });
+    this.setState({ indice: indice + 1, click: false }, () => { this.randomAnswer(); });
     this.setState({ showNextButton: false });
   };
 
@@ -46,6 +47,18 @@ class PlayGame extends Component {
     } return 'correct-answer';
   };
 
+  verifyCorrect = (answer) => {
+    const { questions } = this.props;
+    const { indice, click } = this.state;
+    if (answer !== questions[indice].correct_answer && click === true) {
+      return '3px solid red';
+    }
+    if (answer === questions[indice].correct_answer && click === true) {
+      return '3px solid rgb(6, 240, 15)';
+    }
+    return '1px solid black';
+  };
+
   randomAnswer = () => {
     const { questions } = this.props;
     const { indice } = this.state;
@@ -66,7 +79,7 @@ class PlayGame extends Component {
   };
 
   chooseAnswer = () => {
-    this.setState({ showNextButton: true });
+    this.setState({ showNextButton: true, click: true });
   };
 
   render() {
@@ -87,6 +100,7 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
                       type="button"
+                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[0]]) } }
                       onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[0]]}
@@ -94,6 +108,7 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
                       type="button"
+                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[1]]) } }
                       onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[1]]}
@@ -104,6 +119,7 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
                       type="button"
+                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[0]]) } }
                       onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[0]]}
@@ -111,6 +127,7 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
                       type="button"
+                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[1]]) } }
                       onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[1]]}
@@ -118,6 +135,7 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[2]], 2) }
                       type="button"
+                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[2]]) } }
                       onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[2]]}
@@ -125,6 +143,7 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[3]], aux) }
                       type="button"
+                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[3]]) } }
                       onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[3]]}
@@ -153,12 +172,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 PlayGame.propTypes = {
-  history: PropTypes.shape().isRequired,
-  fetchApiQuestion: PropTypes.shape().isRequired,
-  responseCode: PropTypes.number.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  questions: PropTypes.shape().isRequired,
-  updateState: PropTypes.shape().isRequired,
-};
+  history: PropTypes.object,
+}.isRequired;
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayGame);

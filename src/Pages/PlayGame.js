@@ -135,7 +135,7 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[2]], 2) }
                       type="button"
-                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[2]]) }
+                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[2]]) } }
                       onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[2]]}
@@ -174,6 +174,5 @@ const mapDispatchToProps = (dispatch) => ({
 PlayGame.propTypes = {
   history: PropTypes.object,
 }.isRequired;
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayGame);

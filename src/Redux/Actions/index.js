@@ -2,7 +2,12 @@ import {
   REQUEST_TOKEN,
   GET_QUESTION,
   UPDATE_STATE,
+  TIME_OUT,
 } from '../../helpers/actionTypes';
+
+export const timeOut = () => ({
+  type: TIME_OUT,
+});
 
 const requestToken = () => ({
   type: REQUEST_TOKEN,

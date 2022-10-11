@@ -97,8 +97,6 @@ describe('Teste de rotas', () => {
     userEvent.click(inputButton);
     expect(global.fetch).toBeCalledTimes(1);
     expect(global.fetch).toHaveBeenCalledWith('https://opentdb.com/api_token.php?command=request');
-    // console.log(localStorage);
-    // expect(history.location.pathname).toBe('/playgame');
     });
   });
 });

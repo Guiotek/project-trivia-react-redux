@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Loading from '../components/loading';
 import NextButton from '../components/nextButton';
 import { fetchQuestion, fetchToken, requestUpdateState } from '../Redux/Actions';
+import CountDown from '../components/CountDown';
 
 class PlayGame extends Component {
   state = {
@@ -12,6 +13,7 @@ class PlayGame extends Component {
     iAnswers: [],
     click: false,
     showNextButton: false,
+    isDisabled: false,
   };
 
   async componentDidMount() {
@@ -45,6 +47,21 @@ class PlayGame extends Component {
     if (answer !== questions[indice].correct_answer) {
       return `wrong-answer-${index}`;
     } return 'correct-answer';
+  };
+
+  timeOut = () => {
+    const { isTimeOut } = this.props;
+    if (isTimeOut) {
+      this.setState({
+        isDisabled: true,
+        showNextButton: true,
+      });
+    } else {
+      this.setState({
+        isDisabled: false,
+        showNextButton: false,
+      });
+    }
   };
 
   verifyCorrect = (answer) => {
@@ -85,7 +102,7 @@ class PlayGame extends Component {
   render() {
     const aux = 3;
     const { isLoading, questions } = this.props;
-    const { indice, iAnswers, allAnswers, showNextButton } = this.state;
+    const { indice, iAnswers, allAnswers, showNextButton, isDisabled } = this.state;
     return (
       <div>
         <h1>Jogar</h1>
@@ -102,6 +119,7 @@ class PlayGame extends Component {
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[0]]) } }
                       onClick={ this.chooseAnswer }
+                      disabled={ isDisabled }
                     >
                       {allAnswers[iAnswers[0]]}
                     </button>
@@ -110,6 +128,7 @@ class PlayGame extends Component {
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[1]]) } }
                       onClick={ this.chooseAnswer }
+                      disabled={ isDisabled }
                     >
                       {allAnswers[iAnswers[1]]}
                     </button>
@@ -121,6 +140,8 @@ class PlayGame extends Component {
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[0]]) } }
                       onClick={ this.chooseAnswer }
+                      disabled={ isDisabled }
+
                     >
                       {allAnswers[iAnswers[0]]}
                     </button>
@@ -129,6 +150,8 @@ class PlayGame extends Component {
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[1]]) } }
                       onClick={ this.chooseAnswer }
+                      disabled={ isDisabled }
+
                     >
                       {allAnswers[iAnswers[1]]}
                     </button>
@@ -137,6 +160,8 @@ class PlayGame extends Component {
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[2]]) } }
                       onClick={ this.chooseAnswer }
+                      disabled={ isDisabled }
+
                     >
                       {allAnswers[iAnswers[2]]}
                     </button>
@@ -145,6 +170,7 @@ class PlayGame extends Component {
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[3]]) } }
                       onClick={ this.chooseAnswer }
+                      disabled={ isDisabled }
                     >
                       {allAnswers[iAnswers[3]]}
                     </button>
@@ -152,7 +178,9 @@ class PlayGame extends Component {
               {showNextButton ? <NextButton handleClick={ this.handleClick } /> : null}
             </div>
           )}
-
+        <CountDown
+          timeOut={ this.timeOut }
+        />
       </div>
     );
   }

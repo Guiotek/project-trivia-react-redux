@@ -2,11 +2,13 @@ import {
   REQUEST_TOKEN,
   GET_QUESTION,
   UPDATE_STATE,
+  TIME_OUT,
 } from '../../helpers/actionTypes';
 
 const INITIAL_STATE = {
   isLoading: true,
   allQuestions: [],
+  isTimeOut: false,
 };
 
 const gameReducer = (state = INITIAL_STATE, action) => {
@@ -17,6 +19,11 @@ const gameReducer = (state = INITIAL_STATE, action) => {
     return { ...state,
       allQuestions: action.payload,
       isLoading: true };
+  case TIME_OUT:
+    return {
+      ...state,
+      isTimeOut: true,
+    };
   case UPDATE_STATE:
     return { ...state, isLoading: false };
   default:

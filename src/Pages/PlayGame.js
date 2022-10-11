@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Loading from '../components/loading';
+import NextButton from '../components/nextButton';
 import { fetchQuestion, fetchToken, requestUpdateState } from '../Redux/Actions';
 
 class PlayGame extends Component {
@@ -10,6 +11,7 @@ class PlayGame extends Component {
     allAnswers: [],
     iAnswers: [],
     click: false,
+    showNextButton: false,
   };
 
   async componentDidMount() {
@@ -22,6 +24,7 @@ class PlayGame extends Component {
   handleClick = () => {
     const { indice } = this.state;
     this.setState({ indice: indice + 1, click: false }, () => { this.randomAnswer(); });
+    this.setState({ showNextButton: false });
   };
 
   fetchApi = () => {
@@ -56,10 +59,6 @@ class PlayGame extends Component {
     return '1px solid black';
   };
 
-  onClick = () => this.setState({
-    click: true,
-  });
-
   randomAnswer = () => {
     const { questions } = this.props;
     const { indice } = this.state;
@@ -79,10 +78,14 @@ class PlayGame extends Component {
     this.setState({ allAnswers, iAnswers });
   };
 
+  chooseAnswer = () => {
+    this.setState({ showNextButton: true, click: true });
+  };
+
   render() {
     const aux = 3;
     const { isLoading, questions } = this.props;
-    const { indice, iAnswers, allAnswers } = this.state;
+    const { indice, iAnswers, allAnswers, showNextButton } = this.state;
     return (
       <div>
         <h1>Jogar</h1>
@@ -98,7 +101,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[0]]) } }
-                      onClick={ this.onClick }
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[0]]}
                     </button>
@@ -106,7 +109,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[1]]) } }
-                      onClick={ this.onClick }
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[1]]}
                     </button>
@@ -117,7 +120,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[0]]) } }
-                      onClick={ this.onClick }
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[0]]}
                     </button>
@@ -125,15 +128,15 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[1]]) } }
-                      onClick={ this.onClick }
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[1]]}
                     </button>
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[2]], 2) }
                       type="button"
-                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[2]]) } }
-                      onClick={ this.onClick }
+                      style={ { border: this.verifyCorrect(allAnswers[iAnswers[2]]) }
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[2]]}
                     </button>
@@ -141,12 +144,12 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[3]], aux) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[3]]) } }
-                      onClick={ this.onClick }
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[3]]}
                     </button>
                   </section>)}
-              <button type="button" onClick={ this.handleClick }>PROXIMA</button>
+              {showNextButton ? <NextButton handleClick={ this.handleClick } /> : null}
             </div>
           )}
 
@@ -171,5 +174,6 @@ const mapDispatchToProps = (dispatch) => ({
 PlayGame.propTypes = {
   history: PropTypes.object,
 }.isRequired;
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayGame);

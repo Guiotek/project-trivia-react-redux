@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Loading from '../components/loading';
 import NextButton from '../components/nextButton';
 import { fetchQuestion, fetchToken, requestUpdateState } from '../Redux/Actions';
-import CountDown from '../components/CountDown';
 
 class PlayGame extends Component {
   state = {
@@ -14,19 +13,53 @@ class PlayGame extends Component {
     click: false,
     showNextButton: false,
     isDisabled: false,
+    timer: 30,
+    isCounting: true,
   };
 
   async componentDidMount() {
     const { fetchApiQuestion } = this.props;
-    // await fetchApiToken();
     await fetchApiQuestion();
     this.fetchApi();
+    this.countDown();
   }
+
+  componentDidUpdate() {
+    const { timer } = this.state;
+    if (timer > 0) {
+      this.countDown();
+    }
+    if (timer === 0) {
+      this.setState({
+        timer: 30,
+        isCounting: false,
+        isDisabled: true,
+        showNextButton: true,
+      });
+    }
+  }
+
+  countDown = () => {
+    const { timer, isCounting } = this.state;
+    const timeLimit = 1000;
+    if (isCounting) {
+      return setTimeout(() => {
+        this.setState({
+          timer: timer - 1,
+        });
+      }, timeLimit);
+    }
+  };
 
   handleClick = () => {
     const { indice } = this.state;
     this.setState({ indice: indice + 1, click: false }, () => { this.randomAnswer(); });
     this.setState({ showNextButton: false });
+    this.setState({
+      timer: 30,
+      isDisabled: false,
+      isCounting: true,
+    });
   };
 
   fetchApi = () => {
@@ -47,21 +80,6 @@ class PlayGame extends Component {
     if (answer !== questions[indice].correct_answer) {
       return `wrong-answer-${index}`;
     } return 'correct-answer';
-  };
-
-  timeOut = () => {
-    const { isTimeOut } = this.props;
-    if (isTimeOut) {
-      this.setState({
-        isDisabled: true,
-        showNextButton: true,
-      });
-    } else {
-      this.setState({
-        isDisabled: false,
-        showNextButton: false,
-      });
-    }
   };
 
   verifyCorrect = (answer) => {
@@ -96,13 +114,19 @@ class PlayGame extends Component {
   };
 
   chooseAnswer = () => {
-    this.setState({ showNextButton: true, click: true });
+    this.setState({ showNextButton: true, click: true, isCounting: false });
   };
 
   render() {
     const aux = 3;
     const { isLoading, questions } = this.props;
-    const { indice, iAnswers, allAnswers, showNextButton, isDisabled } = this.state;
+    const { indice,
+      iAnswers,
+      allAnswers,
+      showNextButton,
+      isDisabled,
+      timer,
+    } = this.state;
     return (
       <div>
         <h1>Jogar</h1>
@@ -178,9 +202,7 @@ class PlayGame extends Component {
               {showNextButton ? <NextButton handleClick={ this.handleClick } /> : null}
             </div>
           )}
-        <CountDown
-          timeOut={ this.timeOut }
-        />
+        <h3>{timer}</h3>
       </div>
     );
   }
@@ -191,6 +213,7 @@ const mapStateToProps = (state) => ({
   responseCode: state.gameReducer.allQuestions.response_code,
   questions: state.gameReducer.allQuestions.results,
   query: state.gameReducer.query,
+  isTimeOut: state.gameReducer.isTimeOut,
 });
 
 const mapDispatchToProps = (dispatch) => ({

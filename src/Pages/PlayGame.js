@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Loading from '../components/loading';
+import NextButton from '../components/nextButton';
 import { fetchQuestion, fetchToken, requestUpdateState } from '../Redux/Actions';
 
 class PlayGame extends Component {
@@ -9,6 +10,7 @@ class PlayGame extends Component {
     indice: 0,
     allAnswers: [],
     iAnswers: [],
+    showNextButton: false,
   };
 
   async componentDidMount() {
@@ -21,6 +23,7 @@ class PlayGame extends Component {
   handleClick = () => {
     const { indice } = this.state;
     this.setState({ indice: indice + 1 }, () => { this.randomAnswer(); });
+    this.setState({ showNextButton: false });
   };
 
   fetchApi = () => {
@@ -62,10 +65,14 @@ class PlayGame extends Component {
     this.setState({ allAnswers, iAnswers });
   };
 
+  chooseAnswer = () => {
+    this.setState({ showNextButton: true });
+  };
+
   render() {
     const aux = 3;
     const { isLoading, questions } = this.props;
-    const { indice, iAnswers, allAnswers } = this.state;
+    const { indice, iAnswers, allAnswers, showNextButton } = this.state;
     return (
       <div>
         <h1>Jogar</h1>
@@ -80,12 +87,14 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
                       type="button"
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[0]]}
                     </button>
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
                       type="button"
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[1]]}
                     </button>
@@ -95,29 +104,33 @@ class PlayGame extends Component {
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
                       type="button"
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[0]]}
                     </button>
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
                       type="button"
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[1]]}
                     </button>
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[2]], 2) }
                       type="button"
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[2]]}
                     </button>
                     <button
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[3]], aux) }
                       type="button"
+                      onClick={ this.chooseAnswer }
                     >
                       {allAnswers[iAnswers[3]]}
                     </button>
                   </section>)}
-              <button type="button" onClick={ this.handleClick }>PROXIMA</button>
+              {showNextButton ? <NextButton handleClick={ this.handleClick } /> : null}
             </div>
           )}
 
@@ -142,7 +155,6 @@ const mapDispatchToProps = (dispatch) => ({
 PlayGame.propTypes = {
   history: PropTypes.shape().isRequired,
   fetchApiQuestion: PropTypes.shape().isRequired,
-  // fetchApiToken: PropTypes.shape().isRequired,
   responseCode: PropTypes.number.isRequired,
   isLoading: PropTypes.bool.isRequired,
   questions: PropTypes.shape().isRequired,

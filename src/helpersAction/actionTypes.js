@@ -4,3 +4,7 @@ export const UPDATE_STATE = 'REQUEST_UPDATE_STATE';
 export const TIME_OUT = 'TIME_OUT';
 export const INPUT_NAME = 'INPUT_NAME';
 export const INPUT_EMAIL = 'INPUT_EMAIL';
+export const SEND_SCORE = 'SEND_SCORE';
+export const UPDATE_NAME = 'UPDATE_NAME';
+export const UPDATE_EMAIL = 'UPDATE_EMAIL';
+export const ASSERTIONS = 'ASSERTIONS';

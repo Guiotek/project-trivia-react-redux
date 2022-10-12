@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Loading from '../components/loading';
 import NextButton from '../components/nextButton';
 import { fetchQuestion, fetchToken, requestUpdateState } from '../Redux/Actions';
+import Header from '../components/header';
 
 class PlayGame extends Component {
   state = {
@@ -129,6 +130,7 @@ class PlayGame extends Component {
     } = this.state;
     return (
       <div>
+        <Header />
         <h1>Jogar</h1>
         { isLoading ? <Loading />
           : (

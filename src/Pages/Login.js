@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
+import { inputName, inputEmail } from '../Redux/Actions';
 import logo from '../trivia.png';
 
 class Login extends Component {
@@ -26,10 +28,14 @@ class Login extends Component {
   };
 
   play = async () => {
+    const { sendName, sendEmail } = this.props;
+    const { user, email } = this.state;
     const url = 'https://opentdb.com/api_token.php?command=request';
     const json = await fetch(url);
     const data = await json.json();
     localStorage.setItem('token', `${data.token}`);
+    sendName(user);
+    sendEmail(email);
     this.setState({ redirectPlay: true });
   };
 
@@ -88,4 +94,14 @@ class Login extends Component {
   }
 }
 
-export default connect(null, null)(Login);
+const mapDispatchToProps = (dispatch) => ({
+  sendName: (value) => dispatch(inputName(value)),
+  sendEmail: (value) => dispatch(inputEmail(value)),
+});
+
+Login.propTypes = {
+  sendName: PropTypes.func,
+  sendEmail: PropTypes.func,
+}.isRequired;
+
+export default connect(null, mapDispatchToProps)(Login);

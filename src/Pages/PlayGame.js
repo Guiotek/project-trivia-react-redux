@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Loading from '../components/loading';
 import NextButton from '../components/nextButton';
-import { fetchQuestion, fetchToken, requestUpdateState } from '../Redux/Actions';
+import { fetchQuestion,
+  sendScore, requestUpdateState, assertions } from '../Redux/Actions';
 import Header from '../components/header';
 
 class PlayGame extends Component {
@@ -114,19 +115,33 @@ class PlayGame extends Component {
     this.setState({ allAnswers, iAnswers });
   };
 
-  chooseAnswer = () => {
-    this.setState({ showNextButton: true, click: true, isCounting: false });
+  chooseAnswer = (answer) => {
+    const { questions, dispatchScore, dispatchAssertions } = this.props;
+    const { indice, timer } = this.state;
+    const { difficulty } = questions[indice];
+    const correctAnswer = questions[indice].correct_answer;
+    const defaultWin = 10;
+    const aux = 3;
+    let multiplier;
+    let { score, assertionsCount } = this.props;
+    if (difficulty === 'hard') {
+      multiplier = aux;
+    } else if (difficulty === 'medium') { multiplier = 2; } else { multiplier = 1; }
+    this.setState({ showNextButton: true,
+      click: true,
+      isCounting: false,
+      isDisabled: true });
+    if (answer === correctAnswer) {
+      score += defaultWin + (timer * multiplier);
+      assertionsCount += 1;
+    } dispatchScore(score);
+    dispatchAssertions(assertionsCount);
   };
 
   render() {
     const aux = 3;
     const { isLoading, questions } = this.props;
-    const { indice,
-      iAnswers,
-      allAnswers,
-      showNextButton,
-      isDisabled,
-      timer,
+    const { indice, iAnswers, allAnswers, showNextButton, isDisabled, timer,
     } = this.state;
     return (
       <div>
@@ -144,7 +159,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[0]]) } }
-                      onClick={ this.chooseAnswer }
+                      onClick={ () => { this.chooseAnswer(allAnswers[iAnswers[0]]); } }
                       disabled={ isDisabled }
                     >
                       {allAnswers[iAnswers[0]]}
@@ -153,7 +168,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[1]]) } }
-                      onClick={ this.chooseAnswer }
+                      onClick={ () => { this.chooseAnswer(allAnswers[iAnswers[1]]); } }
                       disabled={ isDisabled }
                     >
                       {allAnswers[iAnswers[1]]}
@@ -165,7 +180,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[0]], 0) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[0]]) } }
-                      onClick={ this.chooseAnswer }
+                      onClick={ () => { this.chooseAnswer(allAnswers[iAnswers[0]]); } }
                       disabled={ isDisabled }
 
                     >
@@ -175,7 +190,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[1]], 1) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[1]]) } }
-                      onClick={ this.chooseAnswer }
+                      onClick={ () => { this.chooseAnswer(allAnswers[iAnswers[1]]); } }
                       disabled={ isDisabled }
 
                     >
@@ -185,7 +200,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[2]], 2) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[2]]) } }
-                      onClick={ this.chooseAnswer }
+                      onClick={ () => { this.chooseAnswer(allAnswers[iAnswers[2]]); } }
                       disabled={ isDisabled }
 
                     >
@@ -195,7 +210,7 @@ class PlayGame extends Component {
                       data-testid={ this.dataTestValue(allAnswers[iAnswers[3]], aux) }
                       type="button"
                       style={ { border: this.verifyCorrect(allAnswers[iAnswers[3]]) } }
-                      onClick={ this.chooseAnswer }
+                      onClick={ () => { this.chooseAnswer(allAnswers[iAnswers[3]]); } }
                       disabled={ isDisabled }
                     >
                       {allAnswers[iAnswers[3]]}
@@ -216,12 +231,15 @@ const mapStateToProps = (state) => ({
   questions: state.gameReducer.allQuestions.results,
   query: state.gameReducer.query,
   isTimeOut: state.gameReducer.isTimeOut,
+  assertionsCount: state.player.assertions,
+  score: state.player.score,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchApiToken: () => dispatch(fetchToken()),
+  dispatchScore: (value) => dispatch(sendScore(value)),
   fetchApiQuestion: () => dispatch(fetchQuestion()),
   updateState: () => dispatch(requestUpdateState()),
+  dispatchAssertions: (value) => dispatch(assertions(value)),
 });
 
 PlayGame.propTypes = {

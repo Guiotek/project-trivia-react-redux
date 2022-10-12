@@ -5,10 +5,34 @@ import {
   TIME_OUT,
   INPUT_NAME,
   INPUT_EMAIL,
+  SEND_SCORE,
+  UPDATE_EMAIL,
+  UPDATE_NAME,
+  ASSERTIONS,
 } from '../../helpersAction/actionTypes';
 
 export const timeOut = () => ({
   type: TIME_OUT,
+});
+
+export const assertions = (value) => ({
+  type: ASSERTIONS,
+  value,
+});
+
+export const sendName = (value) => ({
+  type: UPDATE_NAME,
+  value,
+});
+
+export const sendEmail = (value) => ({
+  type: UPDATE_EMAIL,
+  value,
+});
+
+export const sendScore = (value) => ({
+  type: SEND_SCORE,
+  value,
 });
 
 export const inputEmail = (value) => ({

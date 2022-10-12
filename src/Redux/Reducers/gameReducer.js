@@ -3,7 +3,7 @@ import {
   GET_QUESTION,
   UPDATE_STATE,
   TIME_OUT,
-} from '../../helpers/actionTypes';
+} from '../../helpersAction/actionTypes';
 
 const INITIAL_STATE = {
   isLoading: true,

@@ -3,10 +3,22 @@ import {
   GET_QUESTION,
   UPDATE_STATE,
   TIME_OUT,
+  INPUT_NAME,
+  INPUT_EMAIL,
 } from '../../helpersAction/actionTypes';
 
 export const timeOut = () => ({
   type: TIME_OUT,
+});
+
+export const inputEmail = (value) => ({
+  type: INPUT_EMAIL,
+  value,
+});
+
+export const inputName = (value) => ({
+  type: INPUT_NAME,
+  value,
 });
 
 const requestToken = () => ({

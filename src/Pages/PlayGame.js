@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import Loading from '../components/loading';
 import NextButton from '../components/nextButton';
 import { fetchQuestion,
@@ -17,6 +18,7 @@ class PlayGame extends Component {
     isDisabled: false,
     timer: 30,
     isCounting: true,
+    redirect: false,
   };
 
   async componentDidMount() {
@@ -32,12 +34,10 @@ class PlayGame extends Component {
       this.countDown();
     }
     if (timer === 0) {
-      this.setState({
-        timer: 30,
+      this.setState({ timer: 30,
         isCounting: false,
         isDisabled: true,
-        showNextButton: true,
-      });
+        showNextButton: true });
     }
   }
 
@@ -56,12 +56,14 @@ class PlayGame extends Component {
   handleClick = () => {
     const { indice } = this.state;
     this.setState({ indice: indice + 1, click: false }, () => { this.randomAnswer(); });
-    this.setState({ showNextButton: false });
-    this.setState({
+    this.setState({ showNextButton: false,
       timer: 30,
       isDisabled: false,
-      isCounting: true,
-    });
+      isCounting: true });
+    const maxQuestions = 4;
+    if (indice === maxQuestions) {
+      this.setState({ redirect: true });
+    }
   };
 
   fetchApi = () => {
@@ -79,9 +81,8 @@ class PlayGame extends Component {
   dataTestValue = (answer, index) => {
     const { questions } = this.props;
     const { indice } = this.state;
-    if (answer !== questions[indice].correct_answer) {
-      return `wrong-answer-${index}`;
-    } return 'correct-answer';
+    if (answer !== questions[indice].correct_answer) { return `wrong-answer-${index}`; }
+    return 'correct-answer';
   };
 
   verifyCorrect = (answer) => {
@@ -89,30 +90,31 @@ class PlayGame extends Component {
     const { indice, click } = this.state;
     if (answer !== questions[indice].correct_answer && click === true) {
       return '3px solid red';
-    }
-    if (answer === questions[indice].correct_answer && click === true) {
+    } if (answer === questions[indice].correct_answer && click === true) {
       return '3px solid rgb(6, 240, 15)';
-    }
-    return '1px solid black';
+    } return '1px solid black';
   };
 
   randomAnswer = () => {
     const { questions } = this.props;
     const { indice } = this.state;
     const maxQuestions = 3;
-    const correctAnswer = questions[indice].correct_answer;
-    let iAnswers = [];
-    const allAnswers = [correctAnswer, ...questions[indice].incorrect_answers];
-    if (questions[indice].type === 'boolean') {
-      iAnswers = [0, 1];
-    } else {
-      iAnswers = [0, 1, 2, maxQuestions];
+    const maxIndex = 4;
+    if (indice <= maxIndex) {
+      const correctAnswer = questions[indice].correct_answer;
+      let iAnswers = [];
+      const allAnswers = [correctAnswer, ...questions[indice].incorrect_answers];
+      if (questions[indice].type === 'boolean') {
+        iAnswers = [0, 1];
+      } else {
+        iAnswers = [0, 1, 2, maxQuestions];
+      }
+      for (let i = iAnswers.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [iAnswers[i], iAnswers[j]] = [iAnswers[j], iAnswers[i]];
+      }
+      this.setState({ allAnswers, iAnswers });
     }
-    for (let i = iAnswers.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [iAnswers[i], iAnswers[j]] = [iAnswers[j], iAnswers[i]];
-    }
-    this.setState({ allAnswers, iAnswers });
   };
 
   chooseAnswer = (answer) => {
@@ -141,8 +143,11 @@ class PlayGame extends Component {
   render() {
     const aux = 3;
     const { isLoading, questions } = this.props;
-    const { indice, iAnswers, allAnswers, showNextButton, isDisabled, timer,
+    const { indice, iAnswers, allAnswers, showNextButton, isDisabled, timer, redirect,
     } = this.state;
+    if (redirect) {
+      return <Redirect to="/feedback" />;
+    }
     return (
       <div>
         <Header />
@@ -224,7 +229,6 @@ class PlayGame extends Component {
     );
   }
 }
-
 const mapStateToProps = (state) => ({
   isLoading: state.gameReducer.isLoading,
   responseCode: state.gameReducer.allQuestions.response_code,
@@ -234,16 +238,13 @@ const mapStateToProps = (state) => ({
   assertionsCount: state.player.assertions,
   score: state.player.score,
 });
-
 const mapDispatchToProps = (dispatch) => ({
   dispatchScore: (value) => dispatch(sendScore(value)),
   fetchApiQuestion: () => dispatch(fetchQuestion()),
   updateState: () => dispatch(requestUpdateState()),
   dispatchAssertions: (value) => dispatch(assertions(value)),
 });
-
 PlayGame.propTypes = {
   history: PropTypes.object,
 }.isRequired;
-
 export default connect(mapStateToProps, mapDispatchToProps)(PlayGame);

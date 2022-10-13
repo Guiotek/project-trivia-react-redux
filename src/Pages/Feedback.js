@@ -43,15 +43,34 @@ class Feedback extends Component {
       return <Redirect to="/ranking" />;
     }
     return (
-      <div>
+      <div id="feedbackDiv">
         <Header />
-        <h2 data-testid="feedback-text">{ feedback }</h2>
-        <h3 data-testid="feedback-total-question">{assertions}</h3>
-        <h3 data-testid="feedback-total-score">{score}</h3>
+        <h2
+          data-testid="feedback-text"
+          className="textStyle colorWhite"
+        >
+          { feedback }
+
+        </h2>
+        <h3
+          data-testid="feedback-total-question"
+          className="colorWhite"
+        >
+          {assertions}
+
+        </h3>
+        <h3
+          data-testid="feedback-total-score"
+          className="colorWhite"
+        >
+          {score}
+
+        </h3>
         <button
           type="button"
           onClick={ this.playAgain }
           data-testid="btn-play-again"
+          id="button_playAgain"
         >
           Play Again
         </button>
@@ -59,6 +78,7 @@ class Feedback extends Component {
           type="button"
           onClick={ this.ranking }
           data-testid="btn-ranking"
+          id="button_ranking"
         >
           Ranking
         </button>

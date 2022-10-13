@@ -149,12 +149,12 @@ class PlayGame extends Component {
       return <Redirect to="/feedback" />;
     }
     return (
-      <div>
+      <div id="divPlayGame">
         <Header />
-        <h1>Jogar</h1>
+        <h1 className="textStyle colorWhite">Jogar</h1>
         { isLoading ? <Loading />
           : (
-            <div>
+            <div id="questions">
               <h3 data-testid="question-category">{ questions[indice].category }</h3>
               <p data-testid="question-text">{ questions[indice].question }</p>
               { questions[indice].type === 'boolean'

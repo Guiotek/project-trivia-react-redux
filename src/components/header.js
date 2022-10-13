@@ -25,9 +25,26 @@ class header extends Component {
     const { url } = this.state;
     return (
       <header>
-        <img src={ url } alt="Foto do usuário" data-testid="header-profile-picture" />
-        <h2 data-testid="header-player-name">{name}</h2>
-        <h2 data-testid="header-score">{score}</h2>
+        <img
+          src={ url }
+          alt="Foto do usuário"
+          data-testid="header-profile-picture"
+          id="userImage"
+        />
+        <h2
+          data-testid="header-player-name"
+          className="textStyle colorWhite"
+        >
+          User:
+          {name}
+        </h2>
+        <h2
+          data-testid="header-score"
+          className="textStyle colorWhite"
+        >
+          Score:
+          {score}
+        </h2>
       </header>
     );
   }

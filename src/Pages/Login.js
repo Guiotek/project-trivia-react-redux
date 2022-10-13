@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { inputName, inputEmail } from '../Redux/Actions';
 import logo from '../trivia.png';
+// import './Login.css';
 
 class Login extends Component {
   state = {
@@ -11,6 +12,7 @@ class Login extends Component {
     email: '',
     disabled: true,
     redirectPlay: false,
+    redirectSettings: false,
   };
 
   handleChange = ({ target }) => {
@@ -39,56 +41,78 @@ class Login extends Component {
     this.setState({ redirectPlay: true });
   };
 
+  settings = () => {
+    this.setState({
+      redirectSettings: true,
+    });
+  };
+
   render() {
-    const { user, email, disabled, redirectPlay } = this.state;
+    const { user, email, disabled, redirectPlay, redirectSettings } = this.state;
     if (redirectPlay === true) {
       return (
         <Redirect to="/playgame" />
       );
     }
+    if (redirectSettings === true) {
+      return (
+        <Redirect to="/settings" />
+      );
+    }
     return (
-      <div>
-        <img src={ logo } className="App-logo" alt="logo" />
-        <form>
-          <label htmlFor="name">
-            Name:
-            <input
-              type="text"
-              id="name"
-              data-testid="input-player-name"
-              value={ user }
-              onChange={ this.handleChange }
-              name="user"
-            />
-          </label>
-          <label htmlFor="email">
-            Email:
-            <input
-              type="email"
-              id="email"
-              data-testid="input-gravatar-email"
-              value={ email }
-              onChange={ this.handleChange }
-              name="email"
-            />
-          </label>
-          <button
-            type="button"
-            disabled={ disabled }
-            data-testid="btn-play"
-            onClick={ this.play }
-          >
-            Play
-          </button>
-          <Link to="/settings">
+      <div
+        id="backGround"
+      >
+        <div id="initialDiv">
+          <img src={ logo } className="App-logo" alt="logo" />
+          <form className="forms">
+            <label htmlFor="name">
+              Name:
+              <input
+                type="text"
+                id="name"
+                className="inputForms"
+                data-testid="input-player-name"
+                placeholder="USER"
+                value={ user }
+                onChange={ this.handleChange }
+                name="user"
+              />
+            </label>
+            <label htmlFor="email">
+              Email:
+              <input
+                type="email"
+                id="email"
+                placeholder="EMAIL"
+                className="inputForms"
+                data-testid="input-gravatar-email"
+                value={ email }
+                onChange={ this.handleChange }
+                name="email"
+              />
+            </label>
             <button
               type="button"
+              className="buttonLogin"
+              id="buttonPlay"
+              disabled={ disabled }
+              data-testid="btn-play"
+              onClick={ this.play }
+            >
+              Play
+            </button>
+            <button
+              type="button"
+              id="buttonSettings"
+              className="buttonLogin"
               data-testid="btn-settings"
+              onClick={ this.settings }
             >
               Configurações
             </button>
-          </Link>
-        </form>
+          </form>
+        </div>
       </div>
     );
   }

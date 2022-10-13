@@ -1,18 +1,24 @@
 body {
+  align-items: center;
+  background-image: url('./Images/pageLogin.jpg');
   box-sizing: border-box;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
   margin: 0;
   padding: 0;
+  width: 100vw;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap') ;
 
 #initialDiv {
+  align-items: center;
+  background-color: rgba(77, 76, 76, 0.76);
+  border-radius: 30px;
   display: flex;
   flex-flow: column wrap;
   flex-wrap: nowrap;
-  align-items: center;
-  border-radius: 30px;
-  background-color: rgba(77, 76, 76, 0.76);
   padding: 50px;
   width: 500px;
 }
@@ -24,47 +30,47 @@ body {
 } */
 
 #backGround {
+  align-items: center;
   background-image: url('./Images/pageLogin.jpg');
-  height: 100vh;
-  width: 100vw;
   display: flex;
   flex-direction: column;
+  height: 100vh;
   justify-content: center;
-  align-items: center;
+  width: 100vw;
 }
 
 .forms {
-  font-family: Silkscreen;
+  align-items: center;
+  color: rgb(15, 255, 243);
   display: flex;
   flex-flow: column nowrap;
-  color: rgb(15, 255, 243);
+  font-family: Silkscreen , monospace;
   font-size: larger;
-  align-items: center;
 }
 
 .inputForms {
   border: 1px solid black;
   border-radius: 20px;
-  text-align: center;
-  width: 200px;
   height: 22px;
   margin-bottom: 3px;
+  text-align: center;
+  width: 200px;
 }
 
 .buttonLogin {
-  width: 128px;
-  height: 52px;
-  border-radius: 30px;
   background-color: rgb(0, 116, 194);
-  font-family: Silkscreen;
+  border: black solid 2px;
+  border-radius: 30px;
   color: white;
+  font-family: Silkscreen , monospace;
   font-size: larger;
-  border: black solid 2px
+  height: 52px;
+  width: 128px;
 }
 
 #buttonSettings {
-  text-decoration: none;
   font-size: x-small;
+  text-decoration: none;
 }
 
 #buttonPlay {
@@ -78,9 +84,9 @@ body {
 
 .App-logo {
   height: 150px;
-  width: 450px;
-  pointer-events: none;
   margin-bottom: 50px;
+  pointer-events: none;
+  width: 450px;
 }
 
 .red-border {
@@ -132,25 +138,16 @@ body {
   }
 }
 
-body {
-  background-image: url('./Images/pageLogin.jpg');
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  justify-content: center;
-  align-items: center;
-}
-
 #divPlayGame {
   background-color: rgba(77, 76, 76, 0.877);
-  width: 500px;
   border-radius: 30px;
   display: flex;
   flex-direction: column;
+  width: 500px;
 }
 
 .textStyle {
-  font-family: Silkscreen;
+  font-family: Silkscreen , monospace;
 }
 
 .colorWhite {
@@ -159,7 +156,7 @@ body {
 
 #questions h3 {
   color: white;
-  font-family: Silkscreen
+  font-family: Silkscreen , monospace;
 }
 
 #questions p {
@@ -169,19 +166,19 @@ body {
 
 
 #questions button {
-  margin-right: 10px;
-  width: 200px;
-  height: 70px;
-  margin-bottom: 10px;
   background-color: rgb(117, 117, 117);
   color: white;
-  font-family: Silkscreen;
+  font-family: Silkscreen , monospace;
+  height: 70px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  width: 200px;
 }
 
 #userImage {
-  width: 100px;
-  height: 100px;
   border-radius: 50px;
+  height: 100px;
+  width: 100px;
 }
 
 #feedbackDiv {
@@ -198,8 +195,8 @@ body {
 }
 
 #feedbackDiv button {
-  width: 100px;
+  border-radius: 30px;
   height: 45px;
   margin: 3px;
-  border-radius: 30px;
+  width: 100px;
 }
